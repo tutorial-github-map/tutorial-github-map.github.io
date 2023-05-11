@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        #map {
+            width: 1176px;
+            height: 843px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/Poligoni_1.js"></script>
+        <script src="data/Edges_2.js"></script>
+        <script src="data/Nodes_3.js"></script>
+        <script src="data/Video_4.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[45.46277930745197,9.182821610398449],[45.47126074262447,9.199703669248825]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Positron_0');
+        map.getPane('pane_Positron_0').style.zIndex = 400;
+        var layer_Positron_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            pane: 'pane_Positron_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Positron_0;
+        map.addLayer(layer_Positron_0);
+        function pop_Poligoni_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nome</th>\
+                        <td>' + (feature.properties['Nome'] !== null ? autolinker.link(feature.properties['Nome'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Poligoni_1_0(feature) {
+            switch(String(feature.properties['Categoria'])) {
+                case 'Sala da concerto':
+                    return {
+                pane: 'pane_Poligoni_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,215,44,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Teatro/Sala da concerto':
+                    return {
+                pane: 'pane_Poligoni_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(53,202,200,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Poligoni_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(233,69,233,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Poligoni_1');
+        map.getPane('pane_Poligoni_1').style.zIndex = 401;
+        map.getPane('pane_Poligoni_1').style['mix-blend-mode'] = 'normal';
+        var layer_Poligoni_1 = new L.geoJson(json_Poligoni_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Poligoni_1',
+            layerName: 'layer_Poligoni_1',
+            pane: 'pane_Poligoni_1',
+            onEachFeature: pop_Poligoni_1,
+            style: style_Poligoni_1_0,
+        });
+        bounds_group.addLayer(layer_Poligoni_1);
+        map.addLayer(layer_Poligoni_1);
+        function pop_Edges_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['extrude'] !== null ? autolinker.link(feature.properties['extrude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tessellate'] !== null ? autolinker.link(feature.properties['tessellate'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Edges_2_0() {
+            return {
+                pane: 'pane_Edges_2',
+                opacity: 1,
+                color: 'rgba(164,113,88,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Edges_2');
+        map.getPane('pane_Edges_2').style.zIndex = 402;
+        map.getPane('pane_Edges_2').style['mix-blend-mode'] = 'normal';
+        var layer_Edges_2 = new L.geoJson(json_Edges_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Edges_2',
+            layerName: 'layer_Edges_2',
+            pane: 'pane_Edges_2',
+            onEachFeature: pop_Edges_2,
+            style: style_Edges_2_0,
+        });
+        bounds_group.addLayer(layer_Edges_2);
+        map.addLayer(layer_Edges_2);
+        function pop_Nodes_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['extrude'] !== null ? autolinker.link(feature.properties['extrude'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tessellate'] !== null ? autolinker.link(feature.properties['tessellate'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Nodes_3_0() {
+            return {
+                pane: 'pane_Nodes_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,82,45,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Nodes_3');
+        map.getPane('pane_Nodes_3').style.zIndex = 403;
+        map.getPane('pane_Nodes_3').style['mix-blend-mode'] = 'normal';
+        var layer_Nodes_3 = new L.geoJson(json_Nodes_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Nodes_3',
+            layerName: 'layer_Nodes_3',
+            pane: 'pane_Nodes_3',
+            onEachFeature: pop_Nodes_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Nodes_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Nodes_3);
+        map.addLayer(layer_Nodes_3);
+        function pop_Video_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nome</th>\
+                        <td>' + (feature.properties['Nome'] !== null ? autolinker.link(feature.properties['Nome'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Organizzatore</th>\
+                        <td>' + (feature.properties['Organizzatore'] !== null ? autolinker.link(feature.properties['Organizzatore'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Eventi</th>\
+                        <td>' + (feature.properties['Eventi'] !== null ? autolinker.link(feature.properties['Eventi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Capienza</th>\
+                        <td>' + (feature.properties['Capienza'] !== null ? autolinker.link(feature.properties['Capienza'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Costo medio</th>\
+                        <td>' + (feature.properties['Costo medio'] !== null ? autolinker.link(feature.properties['Costo medio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tipologia</th>\
+                        <td>' + (feature.properties['Tipologia'] !== null ? autolinker.link(feature.properties['Tipologia'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Indirizzo</th>\
+                        <td>' + (feature.properties['Indirizzo'] !== null ? autolinker.link(feature.properties['Indirizzo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Link_video'] !== null ? autolinker.link(feature.properties['Link_video'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Link_embed'] !== null ? autolinker.link(feature.properties['Link_embed'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Video_4_0() {
+            return {
+                pane: 'pane_Video_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,113,141,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Video_4');
+        map.getPane('pane_Video_4').style.zIndex = 404;
+        map.getPane('pane_Video_4').style['mix-blend-mode'] = 'normal';
+        var layer_Video_4 = new L.geoJson(json_Video_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Video_4',
+            layerName: 'layer_Video_4',
+            pane: 'pane_Video_4',
+            onEachFeature: pop_Video_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Video_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Video_4);
+        map.addLayer(layer_Video_4);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Video_4.png" /> Video': layer_Video_4,'<img src="legend/Nodes_3.png" /> Nodes': layer_Nodes_3,'<img src="legend/Edges_2.png" /> Edges': layer_Edges_2,'Poligoni<br /><table><tr><td style="text-align: center;"><img src="legend/Poligoni_1_Saladaconcerto0.png" /></td><td>Sala da concerto</td></tr><tr><td style="text-align: center;"><img src="legend/Poligoni_1_TeatroSaladaconcerto1.png" /></td><td>Teatro/Sala da concerto</td></tr><tr><td style="text-align: center;"><img src="legend/Poligoni_1_2.png" /></td><td></td></tr></table>': layer_Poligoni_1,"Positron": layer_Positron_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
